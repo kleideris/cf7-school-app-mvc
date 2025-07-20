@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using SchoolApp.WebMvcDbFirst.Data;
+
 namespace SchoolApp.WebMvcDbFirst
 {
     public class Program
@@ -5,6 +8,9 @@ namespace SchoolApp.WebMvcDbFirst
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            var connString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<MvcDbContext>(options => options.UseSqlServer(connString));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
