@@ -20,7 +20,7 @@ namespace SchoolApp.WebMvcDbFirst.Repositories
         public async Task<Teacher?> GetCourseTeacherAsync(int id)
         {
             var course = await context.Courses
-                .Where(c => c.TeacherId == id)
+                .Where(c => c.Id == id)
                 .SingleOrDefaultAsync();
             return course?.Teacher;
         }
