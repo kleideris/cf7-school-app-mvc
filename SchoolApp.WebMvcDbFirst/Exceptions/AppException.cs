@@ -1,6 +1,6 @@
-﻿namespace SchoolApp.WebMvcDbFirst.Exception
+﻿namespace SchoolApp.WebMvcDbFirst.Exceptions
 {
-    public abstract class AppException : System.Exception
+    public abstract class AppException : Exception
     {
         public string Code { get; set; }
 

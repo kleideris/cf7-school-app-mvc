@@ -1,4 +1,4 @@
-﻿namespace SchoolApp.WebMvcDbFirst.Exception
+﻿namespace SchoolApp.WebMvcDbFirst.Exceptions
 {
     public class AddInvalidArgumentException : AppException
     {
