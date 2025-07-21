@@ -5,7 +5,7 @@ using SchoolApp.WebMvcDbFirst.Models;
 
 namespace SchoolApp.WebMvcDbFirst.Repositories
 {
-    public class TeacherRepository : BaseRepository<TeacherRepository>, ITeacherRepository
+    public class TeacherRepository : BaseRepository<Teacher>, ITeacherRepository
     {
         public TeacherRepository(MvcDbContext context) : base(context)
         {
