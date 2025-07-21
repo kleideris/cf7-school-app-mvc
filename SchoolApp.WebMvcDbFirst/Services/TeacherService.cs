@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using SchoolApp.WebMvcDbFirst.Data;
 using SchoolApp.WebMvcDbFirst.DTO;
+using SchoolApp.WebMvcDbFirst.Exceptions;
 using SchoolApp.WebMvcDbFirst.Repositories;
+using SchoolApp.WebMvcDbFirst.Security;
 
 namespace SchoolApp.WebMvcDbFirst.Services
 {
@@ -33,24 +35,88 @@ namespace SchoolApp.WebMvcDbFirst.Services
             return userTeachers;
         }
 
-        public Task<List<User>> GetAllUsersTeachersAsync(int pageNumber, int pageSize)
+        public async Task<List<User>> GetAllUsersTeachersAsync(int pageNumber, int pageSize)
         {
-            throw new NotImplementedException();
+            List<User> userTeachers = new();
+            try
+            {
+                userTeachers = await _unitOfWork.TeacherRepository.GetAllUsersTeachersPaginatedAsync(pageNumber, pageSize);
+                _logger.LogInformation("{Message}", "All teachers returned");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{Message}{Exception}", ex.Message, ex.StackTrace);
+            }
+            return userTeachers;
         }
 
-        public Task<User?> GetTeacherByUsernameAsync(string username)
+        public async Task<User?> GetTeacherByUsernameAsync(string username)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.TeacherRepository.GetUserTeacherByUsernameAsync(username);
         }
 
-        public Task<int?> GetTeacherCountAsync()
+        public async Task<int?> GetTeacherCountAsync()
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.TeacherRepository.GetCountAsync();
         }
 
-        public Task SignUpUserAsync(TeacherSignUpDTO request)
+        public async Task SignUpUserAsync(TeacherSignUpDTO request)
         {
-            throw new NotImplementedException();
+            Teacher teacher;
+            User user;
+
+            try
+            {
+                user = ExtractUser(request);
+                User? existingUser = await _unitOfWork.UserRepository.GetByUsernameAsync(user.Username);
+                if (existingUser != null)
+                {
+                    throw new EntityAlreadyExistsException("User", "User with username " + existingUser.Username + " already exists");
+                }
+
+                user.Password = EncryptionUtil.Encrypt(user.Password);
+                await _unitOfWork.UserRepository.AddAsync(user);
+
+                teacher = ExtractTeacher(request);
+                if (await _unitOfWork.TeacherRepository.GetByPhoneNumberAsync(teacher.PhoneNumber) is not null)
+                {
+                    throw new EntityAlreadyExistsException("Teacher", "Teacher with phone number " + teacher.PhoneNumber + " already exists");
+                }
+
+                await _unitOfWork.TeacherRepository.AddAsync(teacher);
+                user.Teacher = teacher;
+                //teacher.User = user;  we dont need this since EF manages the other end of the relationship since both entities are attached
+
+                await _unitOfWork.SaveAsync();
+                _logger.LogInformation("{Message}", "Teacher: " + teacher + " signed up successfully.");  //TODO: add toString in teacher for this to work
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{Message}{Exception}", ex.Message, ex.StackTrace);
+                throw;
+            }
+        }
+
+        private User ExtractUser(TeacherSignUpDTO signUpDTO)
+        {
+            return new User()
+            {
+                Username = signUpDTO.Username!,
+                Password = signUpDTO.Password!,
+                Email = signUpDTO.Email!,
+                Firstname = signUpDTO.Firstname!,
+                Lastname = signUpDTO.Lastname!,
+                UserRole = signUpDTO.UserRole
+            };
+        }
+
+        private Teacher ExtractTeacher(TeacherSignUpDTO signUpDTO)
+        {
+            return new Teacher()
+            {
+                PhoneNumber = signUpDTO.PhoneNumber,
+                Institution = signUpDTO.Institution
+            };
         }
     }
 }
