@@ -11,9 +11,9 @@ namespace SchoolApp.WebMvcDbFirst.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ILogger _logger;
+        private readonly ILogger<TeacherService> _logger;
 
-        public TeacherService(IUnitOfWork unitOfWork, IMapper mapper, ILogger logger)
+        public TeacherService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<TeacherService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -115,7 +115,7 @@ namespace SchoolApp.WebMvcDbFirst.Services
             return new Teacher()
             {
                 PhoneNumber = signUpDTO.PhoneNumber,
-                Institution = signUpDTO.Institution
+                Institution = signUpDTO.Institution!
             };
         }
     }
