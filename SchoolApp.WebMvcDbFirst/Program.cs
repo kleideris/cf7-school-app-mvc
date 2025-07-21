@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolApp.WebMvcDbFirst.Data;
+using SchoolApp.WebMvcDbFirst.Repositories;
 
 namespace SchoolApp.WebMvcDbFirst
 {
@@ -13,6 +14,7 @@ namespace SchoolApp.WebMvcDbFirst
 
             // AddDbContext is scoped - per request a new instance of dbcontext is created
             builder.Services.AddDbContext<MvcDbContext>(options => options.UseSqlServer(connString));
+            builder.Services.AddRepositories();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
