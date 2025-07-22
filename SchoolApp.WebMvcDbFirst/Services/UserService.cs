@@ -3,6 +3,7 @@ using SchoolApp.WebMvcDbFirst.Core.Filters;
 using SchoolApp.WebMvcDbFirst.Data;
 using SchoolApp.WebMvcDbFirst.DTO;
 using SchoolApp.WebMvcDbFirst.Repositories;
+using Serilog;
 using System;
 
 namespace SchoolApp.WebMvcDbFirst.Services
@@ -13,11 +14,11 @@ namespace SchoolApp.WebMvcDbFirst.Services
         private readonly IMapper _mapper;
         private readonly ILogger<UserService> _logger;
 
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<UserService> logger)
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _logger = logger;
+            _logger = new LoggerFactory().AddSerilog().CreateLogger<UserService>();
         }
 
         public async Task<List<User>> GetAllUsersFiltered(int pageNumber, int pageSize, UserFiltersDTO userFiltersDTO)
@@ -72,12 +73,12 @@ namespace SchoolApp.WebMvcDbFirst.Services
 
             try
             {
-                user = await _unitOfWork.UserRepository.GetUserAsync(credentials.Username, credentials.Password);
+                user = await _unitOfWork.UserRepository.GetUserAsync(credentials.Username!, credentials.Password!);
                 _logger.LogInformation("{Message}", "User: " + user + " fount and returned.");  // TODO: user ToString()
             }
             catch (Exception ex)
             {
-                _logger.LogError("{Message}{Exception", ex.Message, ex.StackTrace);
+                _logger.LogError("{Message}{Exception}", ex.Message, ex.StackTrace);
                 throw;
             }
             return user;

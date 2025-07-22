@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SchoolApp.WebMvcDbFirst.Data;
 using SchoolApp.WebMvcDbFirst.Repositories;
+using Serilog;
 
 namespace SchoolApp.WebMvcDbFirst.Services
 {
@@ -11,11 +12,11 @@ namespace SchoolApp.WebMvcDbFirst.Services
         private readonly IMapper _mapper;
         private readonly ILogger<StudentService> _logger;
 
-        public StudentService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<StudentService> logger)
+        public StudentService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _logger = logger;
+            _logger = new LoggerFactory().AddSerilog().CreateLogger<StudentService>();
         }
 
         public async Task<bool> DeleteStudentAsync(int id)

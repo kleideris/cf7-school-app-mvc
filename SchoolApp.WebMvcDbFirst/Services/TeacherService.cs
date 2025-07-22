@@ -4,6 +4,7 @@ using SchoolApp.WebMvcDbFirst.DTO;
 using SchoolApp.WebMvcDbFirst.Exceptions;
 using SchoolApp.WebMvcDbFirst.Repositories;
 using SchoolApp.WebMvcDbFirst.Security;
+using Serilog;
 
 namespace SchoolApp.WebMvcDbFirst.Services
 {
@@ -13,11 +14,11 @@ namespace SchoolApp.WebMvcDbFirst.Services
         private readonly IMapper _mapper;
         private readonly ILogger<TeacherService> _logger;
 
-        public TeacherService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<TeacherService> logger)
+        public TeacherService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _logger = logger;
+            _logger = new LoggerFactory().AddSerilog().CreateLogger<TeacherService>();
         }
 
         public async Task<List<User>> GetAllUsersTeachersAsync()
