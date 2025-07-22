@@ -11,6 +11,13 @@ namespace SchoolApp.WebMvcDbFirst.Services
         private readonly IMapper _mapper;
         private readonly ILogger<StudentService> _logger;
 
+        public StudentService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<StudentService> logger)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _logger = logger;
+        }
+
         public async Task<bool> DeleteStudentAsync(int id)
         {
             bool studentDeleted = false;
