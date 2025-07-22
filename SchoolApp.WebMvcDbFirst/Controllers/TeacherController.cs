@@ -23,19 +23,30 @@ namespace SchoolApp.WebMvcDbFirst.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult SignUp()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> SignUp(TeacherSignUpDTO teacherSignUpDTO)
         {
+            //if (!ModelState.IsValid)
+            //{
+            //    foreach (var entry in ModelState.Values)
+            //    {
+            //        foreach (var error in entry.Errors)
+            //        {
+            //            ErrorArray.Add(new Error("", error.ErrorMessage, ""));
+            //        }
+            //    }
+            //    return View(teacherSignUpDTO);  //we resend it so in case of an error the other values are preserved.
+            //}
+
             if (!ModelState.IsValid)
             {
-                foreach (var entry in ModelState.Values)
-                {
-                    foreach (var error in entry.Errors)
-                    {
-                        ErrorArray.Add(new Error("", error.ErrorMessage, ""));
-                    }
-                }
-                return View(teacherSignUpDTO);  //we resend it so in case of an error the other values are preserved.
+                return View(teacherSignUpDTO);
             }
 
             try

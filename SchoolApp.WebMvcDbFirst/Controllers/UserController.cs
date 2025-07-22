@@ -68,5 +68,7 @@ namespace SchoolApp.WebMvcDbFirst.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "User");
         }
+
+        // TODO: StudentController, CourseController
     }
 }

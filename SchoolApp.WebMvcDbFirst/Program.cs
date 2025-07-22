@@ -33,7 +33,7 @@ namespace SchoolApp.WebMvcDbFirst
                     option.LoginPath = "/User/Login";
                     option.ExpireTimeSpan = TimeSpan.FromMinutes(30);
                 });
-            builder.Services.AddAutoMapper(typeof(MapperConfig)); // cfg => { cfg.AddMaps(typeof(MapperConfig).Assembly); }
+            builder.Services.AddAutoMapper(cfg => { cfg.AddMaps(typeof(MapperConfig).Assembly); }); // cfg => { cfg.AddMaps(typeof(MapperConfig).Assembly); }
             builder.Services.AddScoped<IApplicationService, ApplicationService>();
 
             var app = builder.Build();
