@@ -3,6 +3,7 @@ using SchoolApp.WebMvcDbFirst.Core.Filters;
 using SchoolApp.WebMvcDbFirst.Data;
 using SchoolApp.WebMvcDbFirst.DTO;
 using SchoolApp.WebMvcDbFirst.Repositories;
+using System;
 
 namespace SchoolApp.WebMvcDbFirst.Services
 {
@@ -19,14 +20,50 @@ namespace SchoolApp.WebMvcDbFirst.Services
             _logger = logger;
         }
 
-        public Task<List<User>> GetAllUsersFiltered(int pageNumber, int pageSize, UserFiltersDTO userFiltersDTO)
+        public async Task<List<User>> GetAllUsersFiltered(int pageNumber, int pageSize, UserFiltersDTO userFiltersDTO)
         {
-            throw new NotImplementedException();
+            List<User> users = new();
+            List<Func<User, bool>> predicates = new();
+
+            try
+            {
+                if (!string.IsNullOrEmpty(userFiltersDTO.Username))
+                {
+                    predicates.Add(u => u.Username == userFiltersDTO.Username);
+                }
+                if (!string.IsNullOrEmpty(userFiltersDTO.Email))
+                {
+                    predicates.Add(u => u.Email == userFiltersDTO.Email);
+                }
+                if (!string.IsNullOrEmpty(userFiltersDTO.UserRole))
+                {
+                    predicates.Add(u => u.UserRole.ToString() == userFiltersDTO.UserRole);
+                }
+
+                users = await _unitOfWork.UserRepository.GetAllUsersFilteredPaginatedAsync(pageNumber, pageSize, predicates);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{Message}{Exception}", ex.Message, ex.StackTrace);
+                throw;
+            }
+            return users;
         }
 
-        public Task<User?> GetUserByUsernameAsync(string username)
+        public async Task<User?> GetUserByUsernameAsync(string username)
         {
-            throw new NotImplementedException();
+            User? user = null;
+
+            try
+            {
+                user = await _unitOfWork.UserRepository.GetByUsernameAsync(username);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{Message}{Exception}", ex.Message, ex.StackTrace);
+                throw;
+            }
+            return user;
         }
 
         public async Task<User?> VerifyAndGetUserAsync(UserLoginDTO credentials)
@@ -43,7 +80,6 @@ namespace SchoolApp.WebMvcDbFirst.Services
                 _logger.LogError("{Message}{Exception", ex.Message, ex.StackTrace);
                 throw;
             }
-
             return user;
         }
     }
