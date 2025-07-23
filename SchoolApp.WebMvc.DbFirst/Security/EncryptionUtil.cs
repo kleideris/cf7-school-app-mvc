@@ -8,7 +8,7 @@
             return encryptedPassword;
         }
 
-        public static bool isValidPassword(string plainText, string cipherText)
+        public static bool IsValidPassword(string plainText, string cipherText)
         {
             return BCrypt.Net.BCrypt.Verify(plainText, cipherText);
         }
