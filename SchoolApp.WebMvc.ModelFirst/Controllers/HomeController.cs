@@ -1,8 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
-using SchoolApp.WebMvc.ModeFirst.Models;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using SchoolApp.WebMvc.ModelFirst.Models;
 
-namespace SchoolApp.WebMvc.ModeFirst.Controllers
+
+namespace SchoolApp.WebMvc.ModelFirst.Controllers
 {
     public class HomeController : Controller
     {
@@ -28,5 +29,7 @@ namespace SchoolApp.WebMvc.ModeFirst.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
     }
 }

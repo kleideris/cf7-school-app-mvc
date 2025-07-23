@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolApp.WebMvc.DbFirst", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolApp.WebMvc.ModelFirst", "SchoolApp.WebMvc.ModelFirst\SchoolApp.WebMvc.ModelFirst.csproj", "{EF23541F-4AFF-F79D-7EEE-3FDE51AD31C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolApp.Shared", "SchoolApp.Shared\SchoolApp.Shared.csproj", "{BD8B86BB-8FC7-40B7-8629-9A6256BB3EBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolApp", "SchoolApp\SchoolApp.csproj", "{50F5E827-A18F-418F-826B-6EA078ACC152}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{EF23541F-4AFF-F79D-7EEE-3FDE51AD31C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF23541F-4AFF-F79D-7EEE-3FDE51AD31C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF23541F-4AFF-F79D-7EEE-3FDE51AD31C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD8B86BB-8FC7-40B7-8629-9A6256BB3EBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD8B86BB-8FC7-40B7-8629-9A6256BB3EBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD8B86BB-8FC7-40B7-8629-9A6256BB3EBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD8B86BB-8FC7-40B7-8629-9A6256BB3EBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50F5E827-A18F-418F-826B-6EA078ACC152}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50F5E827-A18F-418F-826B-6EA078ACC152}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50F5E827-A18F-418F-826B-6EA078ACC152}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50F5E827-A18F-418F-826B-6EA078ACC152}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

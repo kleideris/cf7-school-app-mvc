@@ -1,4 +1,4 @@
-namespace SchoolApp.WebMvc.ModeFirst.Models
+namespace SchoolApp.WebMvc.ModelFirst.Models
 {
     public class ErrorViewModel
     {
