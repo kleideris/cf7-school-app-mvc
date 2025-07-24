@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using SchoolApp.Data;
@@ -9,6 +10,7 @@ using SchoolApp.Repositories;
 using SchoolApp.Services;
 using Serilog;
 using System.Text;
+using UsersStudentsAPIApp.Helpers;
 using UsersStudentsMVCApp.Configuration;
 
 namespace SchoolApp
@@ -36,6 +38,29 @@ namespace SchoolApp
                   cfg.AddProfile(new MapperConfig());
               })
           .CreateMapper());
+
+            ///Add Authentication
+            //builder.Services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //}).AddJwtBearer(options =>
+            //{
+            //    options.IncludeErrorDetails = true;
+            //    options.SaveToken = true;
+            //    options.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuerSigningKey = false,
+            //        ValidateIssuer = false,
+            //        ValidateAudience = false,
+            //        RequireExpirationTime = false,
+            //        ValidateLifetime = false,
+            //        //return new JsonWebToken(token); in .NET 8
+            //        /// Override the default token signature validation an do NOT validate the signature
+            //        /// Just return the token
+            //        SignatureValidator = (token, validator) => { return new JwtSecurityToken(token); }
+            //    };
+            //});
 
             builder.Services.AddAuthentication(options =>
             {
@@ -83,6 +108,17 @@ namespace SchoolApp
                           .AllowAnyHeader());
             });
 
+            /// System.Text.JSON
+            /*builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                // Adding a converter for string enums
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });*/
+
+            // If NewtonSoft would be used for json serialization / deserialization
+            // We have to add the NuGet dependencies and the following config
+
             builder.Services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
@@ -94,7 +130,26 @@ namespace SchoolApp
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            //builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "School API", Version = "v1" });
+                // Non-nullable reference are properly documented
+                options.SupportNonNullableReferenceTypes();
+                options.OperationFilter<AuthorizeOperationFilter>();
+                options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme,
+                    new OpenApiSecurityScheme
+                    {
+                        Description = "JWT Authorization header using the Bearer scheme.",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.Http,
+                        Scheme = JwtBearerDefaults.AuthenticationScheme,
+                        BearerFormat = "JWT" 
+                    });
+            });
+
+            //builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
             var app = builder.Build();
 
