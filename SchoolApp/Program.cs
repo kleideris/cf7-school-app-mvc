@@ -117,7 +117,7 @@ namespace SchoolApp
             });*/
 
             // If NewtonSoft would be used for json serialization / deserialization
-            // We have to add the NuGet dependencies and the following config
+            // We have to add the NuGet dependencies and the following config.
 
             builder.Services.AddControllers()
                 .AddNewtonsoftJson(options =>
